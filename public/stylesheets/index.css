@@ -6,14 +6,22 @@ body,
 html {
   height: 100%;
 }
+#title_fill {
+  width: 100px;
+  height: 20px;
+  background-color: #D1C9C8;
+  padding: 10px,10px,10px,10px;
+}
+
 .nav .open > a {
-  background-color: transparent;
+  background-color: #D3D1D1;
+  /*background-color: #FFFF00;*/
 }
 .nav .open > a:hover {
-  background-color: transparent;
+  background-color: #8D8B8B;
 }
 .nav .open > a:focus {
-  background-color: transparent;
+  background-color: #8D8B8B;
 }
 /*-------------------------------*/
 /*           Wrappers            */
@@ -30,6 +38,7 @@ html {
 }
 #wrapper.toggled #sidebar-wrapper {
   width: 220px;
+  background-color: #D3D1D1;
 }
 #wrapper.toggled #page-content-wrapper {
   margin-right: -220px;
@@ -76,7 +85,7 @@ html {
   width: 100%;
 }
 .sidebar-nav li:before {
-  background-color: #020202;;
+  background-color: #cac7c7;
   content: '';
   height: 100%;
   left: 0;
@@ -84,7 +93,7 @@ html {
   top: 0;
   -webkit-transition: width 0.2s ease-in;
   transition: width 0.2s ease-in;
-  width: 3px;
+  /*width: 3px;*/
   z-index: -1;
 }
 .sidebar-nav li:first-child a {
@@ -147,7 +156,7 @@ html {
 /*       Hamburger-Cross         */
 /*-------------------------------*/
 .hamburger {
-  background: transparent;
+  background: #9C9999;
   border: none;
   display: block;
   height: 32px;
@@ -261,7 +270,7 @@ html {
 /*-------------------------------*/
 
 .navheader {
-  background: #1a1a1a;
+  background: #D3D1D1;
 }
 
 .navbar {
@@ -499,4 +508,23 @@ table {
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.4);
   z-index: 1;
+}
+
+
+
+/*myself*/
+#line {
+  width: 100%;
+  height: 2px;
+  background-color: #8D8B8B;
+}
+
+#line1 {
+  width: 200px;
+  height: 2px;
+  background-color: #8D8B8B;
+}
+.word {
+  color: #8D8B8B;
+
 }
