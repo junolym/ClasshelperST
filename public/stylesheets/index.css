@@ -37,7 +37,7 @@ html {
   padding-left: 220px;
 }
 #wrapper.toggled #sidebar-wrapper {
-  width: 220px;
+  width: 160px;
   background-color: #E8EAEC;
 }
 #wrapper.toggled #page-content-wrapper {
@@ -288,6 +288,7 @@ html {
   margin-right: 8px;
   margin-left: 8px;
   padding: 10px;
+  padding-bottom: 8px;
 }
 #rightpage {
   height: 100%;
