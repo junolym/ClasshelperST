@@ -75,7 +75,7 @@ html {
   padding: 0;
   position: relative;
   top: 0;
-  width: 220px;
+  width: 160px;
   height: 70%;
 }
 .sidebar-nav li {
@@ -330,4 +330,8 @@ table {
 .word {
   color: #6090CA;
 
+}
+
+.sidebar-brand:hover {
+background-color: #E8EAEC;
 }
