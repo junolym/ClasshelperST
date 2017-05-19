@@ -1,13 +1,38 @@
 var dao = require('./dao.js');
 var data = require('./data.js');
 
-// dao.checkstudent(15332020, 29, '张增辉')
+// dao.updatestatistics("1", null)
+// .then(function(doc) {
+//     console.log(doc);
+// }).catch(function(err) {
+//     console.log(err);
+// });
+// dao.copyexam(13, 6)
+// .then(function(doc) {
+//     console.log(doc);
+// }).catch(function(err) {
+//     console.log(err);
+// });
+// dao.getanswerbystudent(13, 14331040)
 // .then(function(doc) {
 //     console.log(doc);
 // }).catch(function(err) {
 //     console.log(err);
 // });
 
+// dao.getanswerbyexam(13)
+// .then(function(doc) {
+//     console.log(doc);
+// }).catch(function(err) {
+//     console.log(err);
+// });
+
+// dao.checkstudent(15332020, 29, '张增辉')
+// .then(function(doc) {
+//     console.log(doc);
+// }).catch(function(err) {
+//     console.log(err);
+// });
 // dao.addanswer(1, 1, 1, 0, 'ans')
 // .then(function(doc) {
 //     console.log(doc);
