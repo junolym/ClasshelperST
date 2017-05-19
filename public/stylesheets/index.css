@@ -9,12 +9,12 @@ html {
 #title_fill {
   width: 100px;
   height: 20px;
-  background-color: #D1C9C8;
+  background-color: #E8EAEC;
   padding: 10px,10px,10px,10px;
 }
 
 .nav .open > a {
-  background-color: #D3D1D1;
+  background-color: #E8EAEC;
   /*background-color: #FFFF00;*/
 }
 .nav .open > a:hover {
@@ -38,7 +38,7 @@ html {
 }
 #wrapper.toggled #sidebar-wrapper {
   width: 220px;
-  background-color: #D3D1D1;
+  background-color: #E8EAEC;
 }
 #wrapper.toggled #page-content-wrapper {
   margin-right: -220px;
@@ -80,7 +80,7 @@ html {
 }
 .sidebar-nav li {
   display: inline-block;
-  line-height: 65px;
+  line-height: 29px;
   position: relative;
   width: 100%;
 }
@@ -144,7 +144,9 @@ html {
 }
 
 .sidebar-nav > .item, .sidebar-nav > .bottomItem {
-  font-size: 19px;
+  font-size: 16px;
+  border: solid 1px #DADADB;
+  border-bottom: 0px;
 }
 
 .bottomnav {
@@ -270,7 +272,7 @@ html {
 /*-------------------------------*/
 
 .navheader {
-  background: #D3D1D1;
+  background: #E8EAEC;
 }
 
 .navbar {
@@ -515,16 +517,11 @@ table {
 /*myself*/
 #line {
   width: 100%;
-  height: 2px;
-  background-color: #8D8B8B;
+  height: 1px;
+  background-color: #DADADB;
 }
 
-#line1 {
-  width: 200px;
-  height: 2px;
-  background-color: #8D8B8B;
-}
 .word {
-  color: #8D8B8B;
+  color: #6090CA;
 
 }
