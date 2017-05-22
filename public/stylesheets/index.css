@@ -336,3 +336,8 @@ table {
 .sidebar-brand:hover {
 background-color: #E8EAEC;
 }
+
+.navbar-header {
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
