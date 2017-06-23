@@ -1,17 +1,15 @@
 var mysql = require('promise-mysql');
-var pool  = mysql.createPool({
-    host: 'classhelper.ml',
-    user: 'root',
-    password: 'sysusdcs',
-    database: 'test',
-    charset: 'utf8mb4_unicode_ci'
-});
+
+var config = require('../controllers/config.js');
+
+var pool  = mysql.createPool(config.sql);
 
 function UserError (message) {
     this.message = message || 'UserError';
     this.userError = true;
     this.status = 403;
 };
+
 UserError.prototype = new Error();
 UserError.prototype.constructor = UserError;
 exports.UserError = UserError;
@@ -54,13 +52,25 @@ var getuser = function getuser(account) {
     });
 };
 
-
-
+/**
+ * checkemail
+ *
+ * @param {string} email
+ * @return {Object} Promise
+ */
+var checkemail = function(email) {
+    var sql = "select account from users where email = ? "
+    return pool.query(sql, email).then(result => {
+        if (result.length) {
+            return Promise.reject(new UserError("该邮箱已注册"));
+        }
+        return Promise.resolve()
+    });
+}
 
 /**
  * adduser
  *
- * @param {string} admin 管理员账号
  * @param {string} n_account
  * @param {string} n_password
  * @param {string} n_username
@@ -68,23 +78,16 @@ var getuser = function getuser(account) {
  * @param {string} n_phone
  * @returns {Object} Promise
  */
-var adduser = function(admin, n_account, n_password, n_username,
-                            n_email, n_phone) {
-    // 权限
-    var sql = "select admin from users where account=?";
-    return pool.query(sql, admin).then(function(result) {
-        if (result.length == 0) {
-            return Promise.reject(new UserError('用户不存在'));
-        } else if (result[0].admin == 0) {
-            return Promise.reject(new UserError('没有添加用户的权限'));
-        } else {
-            return Promise.resolve();
+var adduser = function(n_account, n_password, n_username,
+                           n_email, n_phone) {
+    var sql = "insert into users(account, password, username, "
+        + "email, phone) values (?, ?, ?, ?, ?)";
+    return pool.query(sql, [n_account, n_password, n_username,
+        n_email, n_phone]).catch(err => {
+        if (/ER_DUP_ENTRY/.test(err.message)) {
+            return Promise.reject(new UserError('用户名已被注册'));
         }
-    }).then(function() {
-        sql = "insert into users(account, password, username, "
-            + "email, phone) values (?, ?, ?, ?, ?)";
-        return pool.query(sql, [n_account, n_password, n_username, n_email,
-                        n_phone]);
+        return Promise.reject(err);
     });
 };
 
@@ -138,7 +141,7 @@ var deluser = function(account) {
     var sql = "delete from users where account=?";
     return pool.query(sql, account).then(function(result) {
         if (result.affectedRows == 0) {
-            return Promise.reject(new UserError('用户不存在！'));
+            return Promise.reject(new UserError('用户不存在'));
         } else {
             return Promise.resolve();
         }
@@ -188,7 +191,7 @@ var delcourse = function(course_id) {
     var sql = "delete from courses where course_id=?";
     return pool.query(sql, course_id).then(function(result) {
         if (result.affectedRows == 0) {
-            return Promise.reject(new UserError('此课程不存在！'));
+            return Promise.reject(new UserError('此课程不存在'));
         } else {
             return Promise.resolve();
         }
@@ -204,7 +207,9 @@ var delcourse = function(course_id) {
  * 等具体需求再修改
  */
 var getexambycourse = function(course_id) {
-    var sql = "select * from exams where ex_coz_id= ?";
+    var sql = "select * from exams "
+            + "where ex_coz_id=? "
+            + "order by exam_time desc";
     return pool.query(sql, course_id)
 };
 
@@ -237,7 +242,7 @@ var delexam = function(exam_id) {
     var sql = "delete from exams where exam_id=?";
     return pool.query(sql, exam_id).then(function(result) {
         if (result.affectedRows == 0) {
-            return Promise.reject(new UserError('测试不存在'));
+            return Promise.reject(new UserError('测验不存在'));
         } else {
             return Promise.resolve();
         }
@@ -259,7 +264,7 @@ var updateexam = function(exam_id, exam_name, exam_question) {
     var parameter = [exam_name, exam_question, exam_id];
     return pool.query(sql, parameter).then(function(result) {
         if (result.affectedRows == 0) {
-            return Promise.reject(new UserError('测试不存在'));
+            return Promise.reject(new UserError('测验不存在'));
         } else {
             return Promise.resolve();
         }
@@ -281,7 +286,7 @@ var checkexam = function(account, course_id, exam_id) {
     return pool.query(sql, [exam_id, course_id, account])
     .then(function(result) {
         if (result.length == 0) {
-            return Promise.reject(new UserError('测验校验失败'));
+            return Promise.reject(new UserError('测验不存在'));
         } else {
             return Promise.resolve();
         }
@@ -301,7 +306,7 @@ var getexambyid = function(exam_id) {
     var sql = "select * from exams where exam_id=?";
     return pool.query(sql, exam_id).then(function(result) {
         if (result.length == 0) {
-            return Promise.reject(new UserError('该试卷不存在'));
+            return Promise.reject(new UserError('测验不存在'));
         } else {
             return Promise.resolve(result);
         }
@@ -369,7 +374,7 @@ var studentsign = function(course_id, sign_id, stu_id,
         var parameter = [sign_id, stu_id, stu_name];
         return pool.query(sql, parameter);
     }).catch(function(err) {
-        if (/PRIMARY/.test(err)) {
+        if (/ER_DUP_ENTRY/.test(err.message)) {
             return Promise.reject(new UserError('请勿重复签到'));
         }
         return Promise.reject(err);
@@ -416,12 +421,13 @@ var addstudent = function(student) {
  * [{sign_id, time, sign_num, stu_num}]
  */
 var getsignbycourse = function(course_id) {
-    var sql = "select sign_id, course_id, sign_time as time, "
-            + "count(ss_sign_id) as sign_num, "
+    var sql = "select sign_id, sign_time as time, "
+            + "sg_stu_num as sign_num, "
             + "student_num as stu_num "
-            + "from signup, stu_sign, courses "
+            + "from signup, courses "
             + "where course_id = ? and sg_coz_id = course_id "
-            + "and ss_sign_id = sign_id group by sign_id";
+            + "group by sign_id "
+            + "order by sign_time desc";
     return pool.query(sql, course_id);
 }
 
@@ -475,7 +481,7 @@ var checksign = function(account, course_id, sign_id) {
     return pool.query(sql, [account, course_id, sign_id])
     .then(function(result) {
         if (result.length == 0) {
-            return Promise.reject(new UserError('签到id校验失败'));
+            return Promise.reject(new UserError('签到不存在'));
         } else {
             return Promise.resolve();
         }
@@ -672,7 +678,7 @@ var getanswerbystudent = function(exam_id, stu_id) {
             + "where ans_ex_id=? and ans_stu_id=?";
     return pool.query(sql, [exam_id, stu_id]).then(function(result) {
         if (result.length == 0) {
-            return Promise.reject(new UserError('答卷不存在!'));
+            return Promise.reject(new UserError('答卷不存在'));
         } else {
             return Promise.resolve(result);
         }
@@ -691,10 +697,10 @@ var copyexam = function(src_exam_id, des_course_id) {
     var sql = "select * from exams where exam_id=?";
     return pool.query(sql, src_exam_id).then(function(result) {
         if (result.length == 0) {
-            return Promise.reject(new UserError('测验不存在!'));
+            return Promise.reject(new UserError('测验不存在'));
         } else {
             console.log(result);
-            return addexam(des_course_id, result[0].exam_name, 
+            return addexam(des_course_id, result[0].exam_name,
                             result[0].exam_question);
         }
     });
@@ -712,17 +718,139 @@ var updatestatistics = function(exam_id, statistics) {
             + "where exam_id = ?";
     return pool.query(sql, [statistics, exam_id]).then(function(result) {
         if (result.affectedRows == 0) {
-            return Promise.reject(new UserError("该测验不存在"));
+            return Promise.reject(new UserError("测验不存在"));
         } else {
             return Promise.resolve();
         }
     });
 }
+/**
+ * delstusign
+ *
+ * @param {number} sign_id
+ * @param {number} stu_id
+ * @return {Object} Promise
+ */
+var delstusign = function(sign_id, stu_id) {
+    var sql = "delete from stu_sign "
+            + "where ss_sign_id=? and ss_stu_id=?";
+    return pool.query(sql, [sign_id, stu_id]).then(function(result) {
+        if (result.affectedRows == 0) {
+            return Promise.reject(new UserError("学生未签到"));
+        } else {
+            return Promise.resolve();
+        }
+    }).then(function() {
+        var sql = "update signup set sg_stu_num=sg_stu_num-1 "
+                + "where sign_id = ?";
+        return pool.query(sql, sign_id);
+    });
+}
+
+/**
+ * statssignbycourse
+ *
+ * @param {number} course_id
+ * @return {Object} Promise
+ * [stu_id, stu_name, total, sign_num]
+ */
+var statssignbycourse = function(course_id) {
+    var sql = "select cs_stu_id as stu_id, cs_stu_name as stu_name, "
+            + "count(sign_id) as total, count(ss_sign_id) as sign_num "
+            + "from coz_stu "
+            + "inner join signup   on  cs_coz_id = sg_coz_id "
+            + "left join stu_sign  on  sign_id = ss_sign_id "
+            + "                        and ss_stu_id = cs_stu_id "
+            + "where cs_coz_id= ? "
+            + "group by cs_stu_id ";
+    return pool.query(sql, course_id);
+}
+
+/**
+ * statssigndetail
+ *
+ * @param {number} course_id
+ * @param {number} student_id
+ * @return {Object} Promise
+ * [sign_id, time, stu_time]
+ * time: 签到开始时间  stu_time：学生签到时间, 未签到为NULL
+ */
+var statssigndetail = function(course_id, student_id) {
+    var sql = "select sign_id, sign_time as time, "
+            + "stu_sign_time as stu_time "
+            + "from signup "
+            + "left join stu_sign on sign_id = ss_sign_id and ss_stu_id=? "
+            + "where sg_coz_id = ? "
+            + "order by sign_time desc";
+    return pool.query(sql, [student_id, course_id]);
+}
+
+/**
+ * statsexambycourse
+ *
+ * @param {number} course_id
+ * @return {Object} Promise
+ * [stu_id, stu_name, total, exam_num, sum_score]
+ */
+var statsexambycourse = function(course_id) {
+    var sql = "select cs_stu_id as stu_id, cs_stu_name as stu_name, "
+            + "count(exam_id) as total, count(ans_ex_id) as exam_num, "
+            + "sum(ans_score) as sum_score "
+            + "from coz_stu "
+            + "inner join exams  on cs_coz_id = ex_coz_id "
+            + "left join answers on exam_id = ans_ex_id "
+            + "                     and ans_stu_id = cs_stu_id "
+            + "where cs_coz_id= ? "
+            + "group by cs_stu_id ";
+    return pool.query(sql, course_id);
+}
+
+/**
+ * statsexamdetail
+ *
+ * @param {number} course_id
+ * @param {number} student_id
+ * @return {Object} Promise
+ * [exam_id, exam_name, score, time]
+ */
+var statsexamdetail = function(course_id, student_id) {
+    var sql = "select exam_id, exam_name, ans_score as score, "
+            + "ans_time as time "
+            + "from exams "
+            + "left join answers on exam_id = ans_ex_id and ans_stu_id=? "
+            + "where ex_coz_id = ? "
+            + "order by exam_time desc ";
+    return pool.query(sql, [student_id, course_id]);
+}
+
+var getallsignbycourse = function(course_id) {
+    var sql = "select cs_stu_id as stu_id, sign_id, stu_sign_time as sign "
+            + "from coz_stu "
+            + "inner join signup on cs_coz_id = sg_coz_id "
+            + "left join stu_sign on sign_id = ss_sign_id "
+            + "and cs_stu_id = ss_stu_id "
+            + "where cs_coz_id = ?";
+    return pool.query(sql, course_id);
+}
+
+var getallexambycourse = function(course_id) {
+    var sql = "select cs_stu_id as stu_id, exam_id, ans_score as score "
+            + "from coz_stu "
+            + "inner join exams on cs_coz_id = ex_coz_id "
+            + "left join answers on exam_id = ans_ex_id "
+            + "and ans_stu_id = cs_stu_id "
+            + "where cs_coz_id = ?";
+    return pool.query(sql, course_id);
+}
+
+exports.getallexambycourse = getallexambycourse;
+exports.getallsignbycourse = getallsignbycourse;
 
 exports.login = login;
 exports.getuser = getuser;
 exports.adduser = adduser;
 exports.deluser = deluser;
+exports.checkemail = checkemail;
 exports.updateuserinfo = updateuserinfo;
 exports.updateuserpwd = updateuserpwd;
 
@@ -745,14 +873,19 @@ exports.copyexam = copyexam;
 exports.getexambyid = getexambyid;
 exports.getexambycourse = getexambycourse;
 exports.getexambyaccount = getexambyaccount;
+exports.statsexambycourse = statsexambycourse;
+exports.statsexamdetail = statsexamdetail;
 exports.checkexam = checkexam;
 
 exports.addsign = addsign;
 exports.delsign = delsign;
+exports.delstusign = delstusign;
 exports.studentsign = studentsign;
 exports.getsignbyid = getsignbyid;
 exports.getsignbyaccount = getsignbyaccount;
 exports.getsignbycourse = getsignbycourse;
+exports.statssignbycourse = statssignbycourse;
+exports.statssigndetail = statssigndetail;
 exports.checksign = checksign;
 
 exports.addanswer = addanswer;
@@ -760,3 +893,4 @@ exports.getanswerbyexam = getanswerbyexam;
 exports.getanswerbystudent = getanswerbystudent;
 
 exports.addstudent = addstudent;
+

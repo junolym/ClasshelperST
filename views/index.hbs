@@ -8,7 +8,16 @@
 
     <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="/font-awesome/css/font-awesome.min.css" rel="stylesheet" >
-    <link href="/stylesheets/index.css" rel="stylesheet">
+    <link href="/stylesheets/index.css" rel="stylesheet" media="screen">
+
+    <!-- stylesheets of content -->
+    <link href="/stylesheets/fileinput.min.css" rel="stylesheet" media="none" onload="if(media!='all')media='all'">
+    <link href="/stylesheets/course-detail.css" rel="stylesheet" media="none" onload="if(media!='all')media='all'">
+    <link href="/stylesheets/exam-detail.css" rel="stylesheet" media="none" onload="if(media!='all')media='all'">
+    <link href="/stylesheets/examresult.css" rel="stylesheet" media="none" onload="if(media!='all')media='all'">
+    <link href="/stylesheets/animate.min.css" rel="stylesheet" media="none" onload="if(media!='all')media='all'">
+    <link href="/stylesheets/jquery.dataTables.min.css" rel="stylesheet" media="none" onload="if(media!='all')media='all'">
+    <!-- /stylesheets of content -->
 </head>
 <body>
  
@@ -29,6 +38,7 @@
                     </a> -->
 
                 </li>
+<<<<<<< HEAD
                 <li class="item">
                     <a href="#user"><i class="fa fa-user-circle word"></i> <font class="word">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{user}}</font></a>
                 </li>
@@ -43,6 +53,22 @@
                 </li>
                 <li class="bottomItem">
                     <a href="#help"><i class="fa fa-hand-o-left word"></i> <font class="word">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;帮助</font></a>
+=======
+                <li class="item" onclick="navactive(this)">
+                    <a href="#user" class="user" value="主页"><i class="fa fa-home"></i> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;主页</a>
+                </li>
+                <li class="item" onclick="navactive(this)">
+                    <a href="#course" class="course" value="课程"><i class="fa fa-calendar"></i> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;课程</a>
+                </li>
+                <li class="item" onclick="navactive(this)">
+                    <a href="#signin" class="signin" value="签到"><i class="fa fa-check-square-o"></i> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;签到</a>
+                </li>
+                <li class="item" onclick="navactive(this)">
+                    <a href="#exam" class="exam" value="测验"><i class="fa fa-file-excel-o"></i> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;测验</a>
+                </li>
+                <li class="bottomItem" onclick="navactive(this)">
+                    <a href="#help" class="help" value="帮助"><i class="fa fa-hand-o-left"></i> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;帮助</a>
+>>>>>>> master
                 </li>
                 <li class="bottomItem">
                     <a href="/logout"><i class="fa fa-sign-out word"></i> <font class="word">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;退出</font></a>
@@ -55,28 +81,34 @@
 
         <!-- /#sidebar-wrapper -->
 
-        <!-- Page Content -->
         <div id="page-content-wrapper">
             <nav class="navbar navbar-default navbar-fixed-top navheader">
                 <div class="container">
                     <div class="navbar-header">
-                        <a>
-                           <button type="button" class="hamburger is-closed animated fadeInLeft" data-toggle="offcanvas">
-                                <span class="hamb-top"></span>
-                                <span class="hamb-middle"></span>
-                                <span class="hamb-bottom"></span>
-                            </button>
-                        </a>
+                       <button type="button" class="hamburger is-closed animated fadeInLeft" data-toggle="offcanvas">
+                            <span class="hamb-top"></span>
+                            <span class="hamb-middle"></span>
+                            <span class="hamb-bottom"></span>
+                        </button>
+                    </div>
+                    <div class="navbar-searchbox form-group">
+                        <input type="text" id="tablefilter" placeholder="列表过滤" class="form-control" oninput="tablefilter(this.value)" />
                     </div>
                 </div>
 
                 <div id="line"></div>
             </nav>
 
+<<<<<<< HEAD
             
             <div class="container" id="rightpage">
                 <div class="row" id="content">
                 </div>
+=======
+            <div id="rightpage">
+                <!-- Page Content -->
+                <div id="content"></div>
+>>>>>>> master
             </div>
         </div>
         <!-- /#page-content-wrapper -->
@@ -84,9 +116,23 @@
     </div>
     <!-- /#wrapper -->
 
-    <script src="https://cdn.bootcss.com/jquery/1.11.0/jquery.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="/javascripts/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="js/jquery-1.11.0.min.js"><\/script>')</script>
     <script src='/bootstrap/js/bootstrap.min.js'></script>
     <script src='/javascripts/index.js'></script>
+
+    <!-- javascript of content -->
+    <script type="text/javascript">
+        loadJsAsync('/javascripts/showdown.min.js');
+        loadJsAsync('/javascripts/fileinput.min.js');
+        loadJsAsync('/javascripts/xlsx.full.min.js');
+        loadJsAsync('/javascripts/FileSaver.js');
+        loadJsAsync('/javascripts/editcourse.js');
+        loadJsAsync('/javascripts/editexam.js');
+        loadJsAsync('/javascripts/Chart.min.js');
+        loadJsAsync('/javascripts/examresult.js');
+        loadJsAsync('/javascripts/jquery.dataTables.min.js');
+    </script>
+    <!-- /javascript of content -->
 </body>
 </html>

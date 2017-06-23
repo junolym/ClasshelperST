@@ -13,7 +13,7 @@
       <h1>{{examname}}</h1>
     </section>
     <section>
-      <form action="/exam" method="POST" id="examform">
+      <form action="/e" method="POST" id="examform" onsubmit="return confirm('确认交卷吗？')">
       {{#unless preview}}
       <div class="selectiondiv">
         学号 <input type="number" name="studentid" id="stuid"><br>
@@ -34,13 +34,13 @@
           {{/each}}
         {{else if question_judgeanswer}}
           <div class="selectiondiv">
-            <input type="radio" class='radiobox' name="{{id}}" value="1" {{answer_right}}>
+            <input type="radio" class='radiobox' name="{{id}}" value="1" {{lookup answer 1}}>
             <label class="eachselection">
               正确
             </label>
           </div>
           <div class="selectiondiv">
-            <input type="radio" class='radiobox' name="{{id}}" value="0" {{answer_wrong}}>
+            <input type="radio" class='radiobox' name="{{id}}" value="0" {{lookup answer 0}}>
             <label class="eachselection">
               错误
             </label>
@@ -54,7 +54,6 @@
       {{#unless preview}}
       <button type="submit" class="btn btn-large btn-primary" id="jiaojuan">提交</button>
       {{/unless}}
-      <!-- <button type="submit" class="btn btn-large btn-primary" id="jiaojuan">提交</button> -->
       </form>
     </section>
 

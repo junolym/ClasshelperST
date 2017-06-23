@@ -1,0 +1,39 @@
+<div class="bc-container">
+  <ol class="breadcrumb col-md-11">
+    <li><a href="#user">{{username}}</a></li>
+    <li><a href="#course/detail?cid={{cid}}">{{course_name}}</a></li>
+    <li><a href="#exam/result?cid={{cid}}&eid={{eid}}">{{examname}}</a></li>
+    <li class="active">提交列表</li>
+  </ol>
+</div>
+{{#if submitlist}}
+<table class="table data-table table-striped table-hover line-btn">
+  <thead>
+    <tr>
+      <th>学号</th>
+      <th>姓名</th>
+      <th>交卷时间</th>
+      <th>分数</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each submitlist}}
+    <tr>
+      <td>{{studentid}}</td>
+      <td>{{name}}</td>
+      <td>{{time}}</td>
+      <td>{{score}}</td>
+    </tr>
+    {{/each}}
+    <script type="text/javascript">
+      $('tr td').click((e) => {
+        document.location = '#exam/studentanswer?cid={{cid}}&&eid={{eid}}&student=' + $(e.target).parent().children()[0].innerText;
+      });
+    </script>
+  </tbody>
+</table>
+{{else}}
+<div class="jumbotron alert alert-info text-center" role="alert">
+    <p>还没有学生提交答卷哦，点此<a target="_blank" href="/exam/showqrcode?cid={{cid}}&eid={{eid}}">发放试卷</a>吧</p>
+</div>
+{{/if}}

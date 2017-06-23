@@ -1,0 +1,55 @@
+<div class="bc-container">
+  <ol class="breadcrumb col-md-11">
+    <li><a href="#user">{{username}}</a></li>
+    <li><a href="#course/detail?cid={{cid}}">{{course_name}}</a></li>
+    <li class="active">{{stu_id}} - {{stu_name}}</li>
+  </ol>
+</div>
+<div class="col-md-11 panel margin-20 panel-green">
+  <div class="panel-heading">
+    签到情况
+  </div>
+  <table class="panel-body table line-btn">
+    <thead>
+      <tr>
+        <th>签到创建时间 ({{sign_total}})</th>
+        <th>实际签到时间 ({{sign_num}})</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each signins}}
+      <tr onclick="document.location='#signin/detail?cid={{../cid}}&sid={{sign_id}}'">
+        <td>{{time}}</td>
+        <td>{{#if stu_time}}{{stu_time}}{{else}}未签到{{/if}}</td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+<div class="col-md-11 panel margin-20 panel-yellow">
+  <div class="panel-heading">
+    测验情况
+  </div>
+  <table class="panel-body table line-btn">
+    <thead>
+      <tr>
+        <th>测验名称 ({{exam_total}})</th>
+        <th>交卷时间 ({{exam_num}})</th>
+        <th>分数 (总分: {{sum_score}})</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each exams}}
+      {{#if time}}
+      <tr onclick="document.location='#exam/studentanswer?cid={{../cid}}&eid={{exam_id}}&student={{../stu_id}}'">
+      {{else}}
+      <tr onclick="warning('该生未交卷，无法查看答卷')">
+      {{/if}}
+        <td>{{exam_name}}</td>
+        <td>{{#if time}}{{time}}{{else}}未交卷{{/if}}</td>
+        <td>{{#if score}}{{score}}{{else}}0{{/if}}</td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>

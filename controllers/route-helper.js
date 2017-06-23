@@ -1,16 +1,29 @@
+var dao = require('../dao/dao.js');
+var UserError = dao.UserError;
+
 module.exports = {
     checkLogin : checkLogin,
     catchError : catchError,
     dateConverter : dateConverter,
-    parseStu : parseStu
+    parseStu   : parseStu,
+    checkArgs  : checkArgs
 };
+
+function checkArgs(args) {
+    for (var arg in args) {
+        if (!args[arg]) {
+            return Promise.reject(new UserError(arg + '不能为空'));
+        }
+    }
+    return Promise.resolve();
+}
 
 function checkLogin(req, res) {
     return new Promise((resolve, reject) => {
         if (req.session.user) {
             resolve(req.session.user);
         } else {
-            var err = new Error('请先登录再操作');
+            var err = new UserError('请先登录再操作');
             err.needLogin = true;
             reject(err);
         }
@@ -21,7 +34,9 @@ function catchError(req, res, next, reload, userError) {
     return function(err) {
         if (err.needLogin) {
             if (reload) {
-                res.status(302).send('/login');
+                res.status(207).send(JSON.stringify({
+                    reload: '/login'
+                }));
             } else {
                 res.redirect('/login?next='+encodeURIComponent(req.originalUrl));
             }
@@ -33,9 +48,14 @@ function catchError(req, res, next, reload, userError) {
     }
 }
 
-function dateConverter(d) {
-    d.time = (new Date(d.time)).toLocaleString('zh-CN', { hour12 : false })
-        .replace(/[\/|-]/, '年').replace(/[\/|-]/, '月').replace(/ /, '日 ');
+function dateConverter(name) {
+    name = name || 'time';
+    return (obj) => {
+        if (!obj[name]) return;
+        var d = new Date(obj[name]);
+        obj[name] = d.getFullYear() + '年' + d.getMonth() + '月' +  d.getDate() + '日 '
+            + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
+    };
 }
 
 function parseStu(cid, stuJson) {
@@ -56,4 +76,12 @@ function parseStu(cid, stuJson) {
         }
         resolve({ cid : cid, stuArray : stuArray });
     });
+}
+
+String.prototype.format = function() {
+    var str = this;
+    for (var i = 0; i < arguments.length; i++) {
+        str = str.replace('{}', arguments[i]);
+    }
+    return str;
 }

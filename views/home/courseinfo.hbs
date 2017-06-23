@@ -1,0 +1,106 @@
+<div class="bc-container">
+  <ol class="breadcrumb col-md-11">
+    <li><a href="#user">{{username}}</a></li>
+    <li class="active">{{course_name}}</li>
+  </ol>
+</div>
+{{#unless onlystu}}
+<div class="row sign-exam">
+  <div class="col-md-5 panel margin-20 panel-green">
+    <div class="panel-heading">
+      最近签到
+    </div>
+    {{#if signins}}
+    <table class="panel-body table line-btn">
+      <thead>
+        <tr>
+          <th>签到创建时间</th>
+          <th>已签学生</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each signins}}
+        <tr onclick="document.location='#signin/detail?cid={{../cid}}&sid={{sign_id}}'">
+          <td>{{time}}</td>
+          <td>{{sign_num}}</td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+    <div class="panel-footer text-center">
+      <a href="#signin" onclick="setFilter('cid={{cid}}')">查看全部</a>
+    </div>
+    {{else}}
+    <div class="panel-body text-center">
+      无签到，<a target="_blank" href="/signin/create?cid={{cid}}"
+        onclick="setTimeout(function(){loadContent('course/detail?cid={{cid}}')},200)">点此发起</a>
+    </div>
+    {{/if}}
+  </div>
+  <div class="col-md-5 panel margin-20 panel-yellow">
+    <div class="panel-heading">
+      最近测验
+    </div>
+    {{#if exams}}
+    <table class="panel-body table line-btn">
+      <thead>
+        <tr>
+          <th>测验名称</th>
+          <th>已测学生</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each exams}}
+        <tr onclick="document.location='#exam/result?cid={{../cid}}&eid={{exam_id}}'">
+          <td>{{exam_name}}</td>
+          <td>{{exam_stu_num}}</td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+    <div class="panel-footer text-center">
+      <a href="#exam" onclick="setFilter('cid={{cid}}')">查看全部</a>
+    </div>
+    {{else}}
+    <div class="panel-body text-center">
+      无测验，<a href="#exam/create?cid={{cid}}">点此创建</a>
+    </div>
+    {{/if}}
+  </div>
+</div>
+{{/unless}}
+{{#if students}}
+<div class="row">
+  <div class="panel panel-primary margin-20 course-student col-md-11">
+    <div class="panel-heading">
+      统计数据
+    </div>
+    <table class="panel-body table data-table table-striped line-btn">
+      <thead>
+        <tr>
+          <th>学号</th>
+          <th>姓名</th>
+          <th>签到次数</th>
+          <th>测验次数</th>
+          <th>测验总分</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each students}}
+        <tr onclick="document.location='#course/student?cid={{../cid}}&stu={{stu_id}}'">
+          <td>{{stu_id}}</td>
+          <td>{{stu_name}}</td>
+          <td>{{#if sign_num}}{{sign_num}}{{else}}0{{/if}}</td>
+          <td>{{#if exam_num}}{{exam_num}}{{else}}0{{/if}}</td>
+          <td>{{#if sum_score}}{{sum_score}}{{else}}0{{/if}}</td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</div>
+{{else}}
+<div class="jumbotron alert alert-info text-center" role="alert">
+  <p>尚无学生统计数据，<a href="#course/edit?cid={{cid}}">点此查看名单</a></p>
+</div>
+{{/if}}

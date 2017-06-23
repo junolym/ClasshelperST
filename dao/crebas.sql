@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2017/05/16 23:27:24                          */
+/* Created on:     2017/05/28 21:38:02                          */
 /*==============================================================*/
 
 
@@ -40,7 +40,7 @@ create table answers
    ans_ex_id            int not null,
    ans_stu_id           int not null,
    ans_stu_name         char(40),
-   ans_score            char(10),
+   ans_score            int,
    ans_answer           text,
    ans_time             datetime default CURRENT_TIMESTAMP,
    primary key (ans_ex_id, ans_stu_id)
@@ -178,4 +178,3 @@ update signup set sg_stu_num=sg_stu_num+1
 where sign_id=new.ss_sign_id;
 
 insert into users set account='root', password='4F3CC6E16818F2E5F728D5E75D93D157', username='admin', admin=1;
-
