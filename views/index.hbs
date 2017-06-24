@@ -20,8 +20,6 @@
     <!-- /stylesheets of content -->
 </head>
 <body>
- 
-   
     <div id="wrapper">
         <!-- Sidebar -->
         <nav class="navbar navbar-inverse navbar-fixed-top" id="sidebar-wrapper" role="navigation">
@@ -38,22 +36,6 @@
                     </a> -->
 
                 </li>
-<<<<<<< HEAD
-                <li class="item">
-                    <a href="#user"><i class="fa fa-user-circle word"></i> <font class="word">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{user}}</font></a>
-                </li>
-                <li class="item">
-                    <a href="#course"><i class="fa fa-calendar word"></i> <font class="word">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;课程</font></a>
-                </li>
-                <li class="item">
-                    <a href="#signin"><i class="fa fa-check-square-o word"></i> <font class="word">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;签到</font></a>
-                </li>
-                <li class="item">
-                    <a href="#exam"><i class="fa fa-file-excel-o word"></i> <font class="word">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;测试</font></a>
-                </li>
-                <li class="bottomItem">
-                    <a href="#help"><i class="fa fa-hand-o-left word"></i> <font class="word">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;帮助</font></a>
-=======
                 <li class="item" onclick="navactive(this)">
                     <a href="#user" class="user" value="主页"><i class="fa fa-home"></i> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;主页</a>
                 </li>
@@ -68,17 +50,15 @@
                 </li>
                 <li class="bottomItem" onclick="navactive(this)">
                     <a href="#help" class="help" value="帮助"><i class="fa fa-hand-o-left"></i> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;帮助</a>
->>>>>>> master
                 </li>
                 <li class="bottomItem">
-                    <a href="/logout"><i class="fa fa-sign-out word"></i> <font class="word">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;退出</font></a>
+                    <a href="/logout"><i class="fa fa-sign-out"></i> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;退出</a>
                 </li>
             </ul>
             <!-- <ul class="nav sidebar-nav bottomnav">
             </ul> -->
 
         </nav>
-
         <!-- /#sidebar-wrapper -->
 
         <div id="page-content-wrapper">
@@ -95,20 +75,11 @@
                         <input type="text" id="tablefilter" placeholder="列表过滤" class="form-control" oninput="tablefilter(this.value)" />
                     </div>
                 </div>
-
-                <div id="line"></div>
             </nav>
 
-<<<<<<< HEAD
-            
-            <div class="container" id="rightpage">
-                <div class="row" id="content">
-                </div>
-=======
             <div id="rightpage">
                 <!-- Page Content -->
                 <div id="content"></div>
->>>>>>> master
             </div>
         </div>
         <!-- /#page-content-wrapper -->
