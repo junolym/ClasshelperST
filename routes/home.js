@@ -3,6 +3,7 @@ var router = express.Router();
 var dao = require('../dao/dao.js');
 var helper = require('../controllers/route-helper.js');
 
+//route to user page
 router.get('/user', (req, res, next) => {
     var data = {};
     helper.checkLogin(req).then((user) => {
@@ -22,12 +23,14 @@ router.get('/user', (req, res, next) => {
     }).catch(helper.catchError(req, res, next, true));
 });
 
+//route to help page
 router.get('/help', (req, res, next) => {
     helper.checkLogin(req).then((user) => {
         res.render('home/help');
     }).catch(helper.catchError(req, res, next, true));
 });
 
+//route to course page
 router.get('/course', (req, res, next) => {
     helper.checkLogin(req).then((user) => {
         return dao.getcoursebyaccount(user);
@@ -37,6 +40,7 @@ router.get('/course', (req, res, next) => {
     }).catch(helper.catchError(req, res, next, true));
 });
 
+//route to signin page
 router.get('/signin', (req, res, next) => {
     helper.checkLogin(req).then((user) => {
         return dao.getsignbyaccount(user);
@@ -47,6 +51,7 @@ router.get('/signin', (req, res, next) => {
     }).catch(helper.catchError(req, res, next, true));
 });
 
+//route to exam page
 router.get('/exam', (req, res, next) => {
     helper.checkLogin(req).then((user) => {
         return dao.getexambyaccount(user);
