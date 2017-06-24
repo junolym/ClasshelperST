@@ -69,20 +69,20 @@ sql:
     # MySQL server host
     # Valid: ip or host
     # No default values, must be set by yourself
-    host: classhelper.ml  # Give you MySQL for testing easily !
+    host:
     # MySQL user name
-    user: root
+    user:
     # MySQL password
-    password: sysusdcs
+    password:
     # MySQL database
-    database: test
+    database:
     # MySQL charset
     # Default: utf8mb4_unicode_ci
     charset: utf8mb4_unicode_ci
 
 ####################### User Section #######################
 # Control user register
-# Use in controllers/user-manager.js
+# use in controllers/user-manager.js
 ############################################################
 user:
     # Verify user's email or not
@@ -91,12 +91,12 @@ user:
     # Remember to configure smtp if it's set to true
     # Valid: true, false
     # Default: false
-    verifyemail: true
+    verifyemail: false
     # Allow user reset password by email
     # Remember to configure smtp if it's set to true
     # Valid: true, false
     # Default: false
-    resetpassword: true
+    resetpassword: false
     # Which kind of email address will be allowed
     # The value will be used as regular expression
     # Invalid when verifyemail is false
@@ -116,10 +116,10 @@ smtp:
     # Use famous service or host & port
     # Service: famous email service name (no host or port needed)
     # Note: leave service empty to use host and port
-    service: QQ  # Give you email for testing easily !
+    service:
     host:
     port:
     secure: true
     auth:
-        user: 'classhelper@qq.com'
-        pass: 'wifjiuikmipjecbb'
+        user:
+        pass:
