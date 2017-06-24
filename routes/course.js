@@ -5,12 +5,14 @@ var helper = require('../controllers/route-helper.js');
 var qrcode = require('../controllers/qrcode-manager.js');
 var examManager = require('../controllers/exam-manager.js');
 
+//route to post create course
 router.get('/create', (req, res, next) => {
     helper.checkLogin(req).then((user) => {
         res.render('home/coursedetail', { title: '添加课程' });
     }).catch(helper.catchError(req, res, next, true));
 });
 
+//create course
 router.post('/create', (req, res, next) => {
     helper.checkLogin(req).then((user) => {
         return dao.addcourse(user, req.body.form_coursename, req.body.form_coursetime, req.body.form_courseinfo);
@@ -28,6 +30,7 @@ router.post('/create', (req, res, next) => {
     }).catch(helper.catchError(req, res, next, true));
 });
 
+//edit course
 router.post('/edit', (req, res, next) => {
     helper.checkLogin(req).then((user) => {
         return dao.checkcourse(user, req.query.cid);
@@ -50,6 +53,7 @@ router.post('/edit', (req, res, next) => {
     }).catch(helper.catchError(req, res, next, true));
 });
 
+//delete course
 router.get('/delete', (req, res, next) => {
     helper.checkLogin(req).then((user) => {
         return dao.checkcourse(user, req.query.cid);
@@ -63,6 +67,7 @@ router.get('/delete', (req, res, next) => {
     }).catch(helper.catchError(req, res, next, true));
 });
 
+//edit course
 router.get('/edit', (req, res, next) => {
     var coursedetail = {};
     helper.checkLogin(req).then((user) => {
@@ -79,6 +84,7 @@ router.get('/edit', (req, res, next) => {
     }).catch(helper.catchError(req, res, next, true));
 });
 
+//show detail of course
 router.get('/detail', (req, res, next) => {
     var data = {
         onlystu : req.query.only == 'stu',
